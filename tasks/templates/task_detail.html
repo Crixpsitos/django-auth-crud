@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<main class="container d-flex flex-column justify-content-center align-items-center min-vh-100">
+  <section class="mb-5">
+
+    <div class="card w-75 d-flex">
+      <div class="card-header">
+        <h1>{{ task.title }}</h1>
+      </div>
+      <div class="card-body">
+        <p>Hecho por {{ task.user.username }}</p>
+        <p>{{ task.created }}</p>
+
+        <h2>{{ error }}</h2>
+        
+            <form method="POST">
+              {% csrf_token %}
+              {{ form }}
+              <button type="submit" class="btn btn-primary me-2 mb-2 mt-2 d-flex">Update</button>
+            </form>
+
+            <form action="{% url 'delete_task' task.id  %}" method="POST">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-danger mb-2 mt-2 d-flex">Delete</button>
+              </form>
+    
+            <form action="{% url 'completed_task' task.id %}" method="POST">
+              {% csrf_token %}
+              <button type="submit" class="btn btn-success me-2 mb-2 mt-2 d-flex">Mark Complete</button>
+            </form>
+    
+            
+      </div>
+    </div>
+
+  </section>
+</main>
+
+{% endblock content %}

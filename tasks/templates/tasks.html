@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+
+{% block content %}
+<main class="container d-flex flex-column justify-content-center align-items-center min-vh-100">
+  <section class="mb-5">
+    {% if tasks|length > 0 %}
+      <h1>Your Tasks</h1>
+    {% else %}
+    <main class="container w-100 d-flex flex-column justify-content-center align-items-center">
+      <h1>Write a Task</h1>
+      <a href="{% url 'create_tasks' %}" class="btn btn-lg btn-success rounded-circle mx-auto float-end mb-5 border border-dark d-flex align-items-center justify-content-center">
+        <i class="fas fa-plus fa-lg font-weight-bold">+</i>
+      </a>
+    </main>
+    {% endif %}
+  </section>
+
+  <ul class="list-group list-group-flush border-top">
+    {% for task in tasks %}
+    <li class="list-group-item d-flex justify-content-between align-items-center rounded-0 py-3 px-4">
+      <div class="flex-grow-1">
+        <h5 class="mb-1 {% if task.important and not task.datecompleted %}text-danger font-weight-bold{% endif %}">
+          {{ task.title }}
+          {% if task.datecompleted %}
+            ✅
+          {% else %}
+            ⚠️
+          {% endif %}
+        </h5>
+        {% if not task.datecompleted %}
+        <p class="mb-2">{{ task.description }}</p>
+        {% endif %}
+        <p class="mb-0 text-muted small">Completed: {{ task.datecompleted|date:'M J Y:i' }}</p>
+      </div>
+      <div class="d-flex">
+        <a href="{% url 'task_detail' task.id %}" class="btn btn-outline-primary btn-sm rounded-pill">
+          <i class="fas fa-edit"></i> Edit
+        </a>
+        <form action="{% url "completed_task" task.id %}" method="POST">
+          {% csrf_token %}
+          {% if not task.datecompleted %}
+          <button class="btn btn-outline-secondary btn-sm rounded-pill ms-2">
+            <i class="fas fa-check">Mark Complete</i> 
+          </button>
+          {% endif %}
+          
+        </form>
+      </div>
+    </li>
+    {% endfor %}
+  </ul>
+</main>
+{% endblock content %}
