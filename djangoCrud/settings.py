@@ -28,7 +28,7 @@ os.environ['SECRET_KEY'] = secret_key
 SECRET_KEY = SECRET_KEY = os.environ.get('SECRET_KEY', default= secrets.token_urlsafe(50))
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = 'RENDER' not in os.environ
 
 ALLOWED_HOSTS = []
 
